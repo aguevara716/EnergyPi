@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Custom Rules
+database-settings.ini
+meter-settings.ini
+weather-settings.ini
