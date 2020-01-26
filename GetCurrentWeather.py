@@ -1,13 +1,14 @@
 import urllib.request
 import urllib.parse
 import json
+import sys
 import mysql.connector as mariadb
 from datetime import datetime
 from configparser import ConfigParser
 
 def get_current_conditions():
     config = ConfigParser()
-    config.read("weather-settings.ini")
+    config.read(weather_settings_file)
     latitude = config.getfloat("main", "latitude")
     longitude = config.getfloat("main", "longitude")
     api_key = config.get("main", "darksky_api_key")
@@ -28,7 +29,7 @@ def get_timestamp_as_string():
 
 def write_to_database(timestamp, temperature_f, humidity):
     config = ConfigParser()
-    config.read("database-settings.ini")
+    config.read(db_settings_file)
     username = config.get("main", "user")
     password = config.get("main", "password")
     database = config.get("main", "database")
@@ -42,6 +43,12 @@ def write_to_database(timestamp, temperature_f, humidity):
     mariadb_connection.commit()
     mariadb_connection.close()
 
+if len(sys.argv) != 3:
+    print("Incorrect number of args specified")
+    sys.exit(1)
+
+weather_settings_file = sys.argv[1]
+db_settings_file = sys.argv[2]
 
 current_conditions = get_current_conditions()
 timestamp = get_timestamp_as_string()

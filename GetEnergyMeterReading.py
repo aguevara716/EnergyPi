@@ -1,6 +1,7 @@
 import subprocess
 import shlex
 import json
+import sys
 import mysql.connector as mariadb
 from datetime import datetime
 from dateutil import parser
@@ -31,7 +32,7 @@ def parse_output(line):
 
 def get_database_connection():
     config = ConfigParser()
-    config.read("database-settings.ini")
+    config.read(db_settings_file)
     user = config.get("main", "user")
     password = config.get("main", "password")
     database = config.get("main", "database")
@@ -70,8 +71,15 @@ def write_to_database(timestamp, consumption_kwh, prev_consumption):
     mariadb_connection.close()
 
 
+if len(sys.argv) != 3:
+    print("Incorrect number of args specified")
+    sys.exit(1)
+
+meter_settings_file = sys.argv[1]
+db_settings_file = sys.argv[2]
+
 config = ConfigParser()
-config.read("meter-settings.ini")
+config.read(meter_settings_file)
 meter_id = config.get("main", "meter_id")
 command = f"rtlamr -filterid={meter_id} -msgtype=scm -format=json -unique"
 run_command(command)
