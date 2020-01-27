@@ -9,6 +9,6 @@ SELECT
 FROM
     EnergyLogs
 GROUP BY
-    DAYOFMONTH(`Timestamp`)
+    `Date`
 ORDER BY
     `Date`;
