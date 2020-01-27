@@ -9,6 +9,6 @@ SELECT
 FROM
     EnergyLogs
 GROUP BY
-    HOUR(`TIMESTAMP`)
+    DATE_FORMAT(`Timestamp`, '%Y-%m-%d %H:00')
 ORDER BY
-    `TIMESTAMP`;
+    DATE_FORMAT(`Timestamp`, '%Y-%m-%d %H:00');
