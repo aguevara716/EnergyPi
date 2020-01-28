@@ -43,6 +43,7 @@ def write_to_database(timestamp, temperature_f, humidity):
     mariadb_connection.commit()
     mariadb_connection.close()
 
+
 if len(sys.argv) != 3:
     print("Incorrect number of args specified")
     sys.exit(1)
