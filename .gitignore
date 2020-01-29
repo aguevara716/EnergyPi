@@ -132,3 +132,4 @@ dmypy.json
 database-settings.ini
 meter-settings.ini
 weather-settings.ini
+node_modules
