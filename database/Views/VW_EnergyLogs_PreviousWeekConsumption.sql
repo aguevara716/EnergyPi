@@ -1,0 +1,9 @@
+CREATE OR REPLACE VIEW VW_EnergyLogs_PreviousWeekConsumption
+AS
+SELECT
+	*
+FROM
+	VW_EnergyLogs_DailyConsumption
+WHERE
+	`Date` >= FIRST_DAY_OF_WEEK(SUBDATE(CURDATE(), INTERVAL 7 DAY)) AND
+	`Date` < FIRST_DAY_OF_WEEK(CURDATE());

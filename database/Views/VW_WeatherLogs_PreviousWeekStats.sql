@@ -1,0 +1,9 @@
+CREATE OR REPLACE VIEW VW_WeatherLogs_PreviousWeekStats
+AS
+SELECT
+	*
+FROM
+	VW_WeatherLogs_DailyStats
+WHERE
+	`Date` >= FIRST_DAY_OF_WEEK(SUBDATE(CURDATE(), INTERVAL 7 DAY)) AND
+	`Date` < FIRST_DAY_OF_WEEK(CURDATE());

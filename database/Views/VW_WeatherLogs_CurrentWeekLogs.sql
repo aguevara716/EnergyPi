@@ -1,0 +1,9 @@
+CREATE OR REPLACE VIEW VW_WeatherLogs_CurrentWeekLogs
+AS
+SELECT
+	*
+FROM
+	WeatherLogs
+WHERE
+	`Timestamp` >= FIRST_DAY_OF_WEEK(CURDATE()) AND
+	`Timestamp` < FIRST_DAY_OF_NEXT_WEEK(CURDATE());
