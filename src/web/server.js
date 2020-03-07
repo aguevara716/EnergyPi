@@ -2,6 +2,8 @@ const express = require("express");
 const mysql = require("mysql");
 const app = express();
 const port = process.env.PORT || 3000;
+
+const views = require("./routes/views");
 const energyLogs = require("./routes/energylogs");
 const weatherLogs = require("./routes/weatherlogs");
 
@@ -17,6 +19,18 @@ db.connect((err) => {
     console.log(`Connected to database ${global.db.database}`);
 });
 global.db = db;
+
+// Configuration
+app.use(express.static("scripts"));
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
+
+// UI
+app.get("/", views.getHomePage);
+app.get("/today", views.getTodayPage);
+app.get("/week", views.getWeekPage);
+app.get("/month", views.getMonthPage);
+app.get("/year", views.getYearPage);
 
 // EnergyLogs
 app.get("/EnergyLogs/getCurrentMonthLogs", energyLogs.getCurrentMonthLogs);
