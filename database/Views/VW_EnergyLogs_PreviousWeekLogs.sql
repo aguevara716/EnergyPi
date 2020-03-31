@@ -1,9 +1,0 @@
-CREATE OR REPLACE VIEW VW_EnergyLogs_PreviousWeekLogs
-AS
-SELECT
-	*
-FROM
-	EnergyLogs
-WHERE
-	`Timestamp` >= FIRST_DAY_OF_WEEK(SUBDATE(CURDATE(), INTERVAL 7 DAY)) AND
-	`Timestamp` < FIRST_DAY_OF_WEEK(CURDATE());
