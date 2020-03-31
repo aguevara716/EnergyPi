@@ -4,24 +4,29 @@ module.exports = {
             title: "Welcome to Energy Pi"
         });
     },
-    getTodayPage: (req, res) => {
-        res.render("today.ejs", {
-            title: "Today's Readings"
+    getDailyResultsPage: (req, res) => {
+        res.render("daily.ejs", {
+            title: "Readings by day"
         });
     },
-    getWeekPage: (req, res) => {
-        res.render("week.ejs", {
-            title: "This week's readings"
+    getWeeklyResultsPage: (req, res) => {
+        res.render("weekly.ejs", {
+            title: "Readings by week"
         });
     },
-    getMonthPage: (req, res) => {
-        res.render("month.ejs", {
-            title: "This month's readings"
+    getMonthlyResultsPage: (req, res) => {
+        res.render("monthly.ejs", {
+            title: "Readings by month"
         });
     },
-    getYearPage: (req, res) => {
-        res.render("year.ejs", {
-            title: "This year's readings"
+    getYearlyResultsPage: (req, res) => {
+        res.render("yearly.ejs", {
+            title: "Readings by year"
+        })
+    },
+    getCustomViewPage: (req, res) => {
+        res.render("custom_view.ejs", {
+            title: "Custom View Data"
         })
     }
 };

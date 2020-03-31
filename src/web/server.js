@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 const views = require("./routes/views");
 const energyLogs = require("./routes/energylogs");
 const weatherLogs = require("./routes/weatherlogs");
+const customViews = require("./routes/custom_views");
 
 const db = mysql.createConnection({
     host: "serverpi.local",
@@ -22,15 +23,18 @@ global.db = db;
 
 // Configuration
 app.use(express.static("scripts"));
+app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 // UI
 app.get("/", views.getHomePage);
-app.get("/today", views.getTodayPage);
-app.get("/week", views.getWeekPage);
-app.get("/month", views.getMonthPage);
-app.get("/year", views.getYearPage);
+app.get("/daily", views.getDailyResultsPage);
+app.get("/weekly", views.getWeeklyResultsPage);
+app.get("/monthly", views.getMonthlyResultsPage);
+app.get("/yearly", views.getYearlyResultsPage);
+app.get("/custom", views.getCustomViewPage);
 
 // EnergyLogs
 app.get("/EnergyLogs/getCurrentMonthLogs", energyLogs.getCurrentMonthLogs);
@@ -44,6 +48,7 @@ app.get("/EnergyLogs/getPreviousWeekLogs", energyLogs.getPreviousWeekLogs);
 app.get("/EnergyLogs/getTodaysHourlyConsumption", energyLogs.getTodaysHourlyConsumption);
 app.get("/EnergyLogs/getTodaysLogs", energyLogs.getTodaysLogs);
 app.get("/EnergyLogs/getYearlyConsumption", energyLogs.getYearlyConsumption);
+app.post("/EnergyLogs/getDailyData", energyLogs.getDailyData);
 
 // WeatherLogs
 app.get("/WeatherLogs/getCurrentMonthLogs", weatherLogs.getCurrentMonthLogs);
@@ -55,6 +60,10 @@ app.get("/WeatherLogs/getPreviousWeekLogs", weatherLogs.getPreviousWeekLogs);
 app.get("/WeatherLogs/getPreviousWeekStats", weatherLogs.getPreviousWeekStats);
 app.get("/WeatherLogs/getTodaysLogs", weatherLogs.getTodaysLogs);
 app.get("/WeatherLogs/getYearlyStats", weatherLogs.getYearlyStats);
+app.post("/WeatherLogs/getDailyData", weatherLogs.getDailyData);
+
+// CustomViews
+app.post("/getCustomViewData", customViews.getCustomViewData);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)

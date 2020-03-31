@@ -1,0 +1,26 @@
+<%- include("partials/header") -%>
+<script type="text/javascript" src="custom_view.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm" id="view-selection-column">
+            Table:
+            <input id="table-name" type="text">
+        </div>
+        <div class="col-sm" id="start-date-column">
+            Start Date:
+            <input id="start-date" type="date">
+        </div>
+        <div class="col-sm" id="end-date-column">
+            End Date:
+            <input id="end-date" type="date">
+        </div>
+        <div class="col-sm" id="submit-column">
+            <button class="btn btn-primary" id="submit-btn">Get Data</button>
+        </div>
+    </div>
+</div>
+
+<div id="custom-chart" class="chart"></div>
+
+<%- include("partials/footer") -%>

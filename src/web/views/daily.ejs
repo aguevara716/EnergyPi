@@ -1,0 +1,22 @@
+<%- include("partials/header") -%>
+<script type="text/javascript" src="daily.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm" id="date-column">
+            Date:
+            <input id="date-input" type="date">
+        </div>
+        <div class="col-sm" id="submit-column">
+            <button class="btn btn-primary" id="submit-btn">Show Results</button>
+        </div>
+    </div>
+</div>
+
+<!-- <div id="energyTodaysHourlyConsumption" class="chart"></div>
+<div id="weatherTodaysLogs", class="chart"></div> -->
+
+<div id="daily-energy-chart" class="chart"></div>
+<div id="daily-weather-chart" class="chart"></div>
+
+<%- include("partials/footer") -%>
