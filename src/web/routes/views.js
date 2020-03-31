@@ -4,8 +4,8 @@ module.exports = {
             title: "Welcome to Energy Pi"
         });
     },
-    getDailyResultsPage: (req, res) => {
-        res.render("daily.ejs", {
+    getDayResultsPage: (req, res) => {
+        res.render("day.ejs", {
             title: "Readings by day"
         });
     },

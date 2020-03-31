@@ -30,7 +30,7 @@ app.set("view engine", "ejs");
 
 // UI
 app.get("/", views.getHomePage);
-app.get("/daily", views.getDailyResultsPage);
+app.get("/day", views.getDayResultsPage);
 app.get("/weekly", views.getWeeklyResultsPage);
 app.get("/monthly", views.getMonthlyResultsPage);
 app.get("/yearly", views.getYearlyResultsPage);
@@ -48,7 +48,7 @@ app.get("/EnergyLogs/getPreviousWeekLogs", energyLogs.getPreviousWeekLogs);
 app.get("/EnergyLogs/getTodaysHourlyConsumption", energyLogs.getTodaysHourlyConsumption);
 app.get("/EnergyLogs/getTodaysLogs", energyLogs.getTodaysLogs);
 app.get("/EnergyLogs/getYearlyConsumption", energyLogs.getYearlyConsumption);
-app.post("/EnergyLogs/getDailyData", energyLogs.getDailyData);
+app.post("/EnergyLogs/getDayData", energyLogs.getDayData);
 
 // WeatherLogs
 app.get("/WeatherLogs/getCurrentMonthLogs", weatherLogs.getCurrentMonthLogs);
@@ -60,7 +60,7 @@ app.get("/WeatherLogs/getPreviousWeekLogs", weatherLogs.getPreviousWeekLogs);
 app.get("/WeatherLogs/getPreviousWeekStats", weatherLogs.getPreviousWeekStats);
 app.get("/WeatherLogs/getTodaysLogs", weatherLogs.getTodaysLogs);
 app.get("/WeatherLogs/getYearlyStats", weatherLogs.getYearlyStats);
-app.post("/WeatherLogs/getDailyData", weatherLogs.getDailyData);
+app.post("/WeatherLogs/getDayData", weatherLogs.getDayData);
 
 // CustomViews
 app.post("/getCustomViewData", customViews.getCustomViewData);

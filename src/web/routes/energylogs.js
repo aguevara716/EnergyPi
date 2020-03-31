@@ -1,5 +1,5 @@
 module.exports = {
-    getDailyData: (req, res) => {
+    getDayData: (req, res) => {
         let startDate = new Date(req.body.selectedDate);
         let startDateString = startDate.toISOString().split('T')[0];
         let endDate = new Date(startDate.setDate(startDate.getDate() + 1));

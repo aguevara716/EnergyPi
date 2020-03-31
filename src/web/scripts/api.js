@@ -23,7 +23,7 @@ function getEnergyLogsHourlyConsumption(callback) {
 
 // Day
 function getEnergyLogsDailyConsumption(callback) {
-    executeAjaxGet("/EnergyLogs/getDailyConsumption", callback);
+    executeAjaxGet("/EnergyLogs/getDayConsumption", callback);
 }
 
 // Week
@@ -61,7 +61,7 @@ function getWeatherLogsTodaysLogs(callback) {
 
 // Day
 function getWeatherLogsDailyStats(callback) {
-    executeAjaxGet("/WeatherLogs/getDailyStats", callback);
+    executeAjaxGet("/WeatherLogs/getDayStats", callback);
 }
 
 // Week
