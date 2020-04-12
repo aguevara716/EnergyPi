@@ -37,18 +37,20 @@ app.get("/yearly", views.getYearlyResultsPage);
 app.get("/custom", views.getCustomViewPage);
 
 // EnergyLogs
-app.get("/EnergyLogs/getCurrentMonthLogs", energyLogs.getCurrentMonthLogs);
-app.get("/EnergyLogs/getCurrentWeekConsumption", energyLogs.getCurrentWeekConsumption);
-app.get("/EnergyLogs/getCurrentWeekLogs", energyLogs.getCurrentWeekLogs);
-app.get("/EnergyLogs/getDailyConsumption", energyLogs.getDailyConsumption);
-app.get("/EnergyLogs/getHourlyConsumption", energyLogs.getHourlyConsumption);
-app.get("/EnergyLogs/getMonthlyConsumption", energyLogs.getMonthlyConsumption);
-app.get("/EnergyLogs/getPreviousWeekConsumption", energyLogs.getPreviousWeekConsumption);
-app.get("/EnergyLogs/getPreviousWeekLogs", energyLogs.getPreviousWeekLogs);
-app.get("/EnergyLogs/getTodaysHourlyConsumption", energyLogs.getTodaysHourlyConsumption);
-app.get("/EnergyLogs/getTodaysLogs", energyLogs.getTodaysLogs);
-app.get("/EnergyLogs/getYearlyConsumption", energyLogs.getYearlyConsumption);
+// app.get("/EnergyLogs/getCurrentMonthLogs", energyLogs.getCurrentMonthLogs);
+// app.get("/EnergyLogs/getCurrentWeekConsumption", energyLogs.getCurrentWeekConsumption);
+// app.get("/EnergyLogs/getCurrentWeekLogs", energyLogs.getCurrentWeekLogs);
+// app.get("/EnergyLogs/getDailyConsumption", energyLogs.getDailyConsumption);
+// app.get("/EnergyLogs/getHourlyConsumption", energyLogs.getHourlyConsumption);
+// app.get("/EnergyLogs/getMonthlyConsumption", energyLogs.getMonthlyConsumption);
+// app.get("/EnergyLogs/getPreviousWeekConsumption", energyLogs.getPreviousWeekConsumption);
+// app.get("/EnergyLogs/getPreviousWeekLogs", energyLogs.getPreviousWeekLogs);
+// app.get("/EnergyLogs/getTodaysHourlyConsumption", energyLogs.getTodaysHourlyConsumption);
+// app.get("/EnergyLogs/getTodaysLogs", energyLogs.getTodaysLogs);
+// app.get("/EnergyLogs/getYearlyConsumption", energyLogs.getYearlyConsumption);
 app.post("/EnergyLogs/getDayData", energyLogs.getDayData);
+app.post("/EnergyLogs/getHourlyLogs", energyLogs.getHourlyLogs);
+app.post("/EnergyLogs/getDailyLogs", energyLogs.getDailyLogs);
 
 // WeatherLogs
 app.get("/WeatherLogs/getCurrentMonthLogs", weatherLogs.getCurrentMonthLogs);

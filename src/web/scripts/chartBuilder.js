@@ -1,3 +1,24 @@
+function populateDataPoints(results, graphType) {
+    var dataPoints = [];
+    if (graphType === "raw") {
+        results.forEach(element => {
+            dataPoints.push({ x: new Date(element.Timestamp), y: element.Delta });
+        });
+    }
+    else if (graphType === "hourly") {
+        results.forEach(element => {
+            dataPoints.push({ x: new Date(element.Timestamp), y: element.kWh });
+        });
+    }
+    else if (graphType === "tou") {
+        results.forEach(element => {
+            dataPoints.push({ x: new Date(element.Timestamp), y: element.kWh });
+        });
+    }
+
+    return dataPoints;
+}
+
 function buildEnergyChart(divId, chartTitle, xAxisTitle, yAxisTitle, data) {
     var chart = new CanvasJS.Chart(divId, {
         title: {

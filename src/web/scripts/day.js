@@ -1,30 +1,30 @@
 $(document).ready(function() {
     var today = new Date().toISOString().split('T')[0];
     $("#date-input").val(today);
-    loadDayData(today);
+    var selectedGraphType = $("#graph-type-select").val();
+    loadDayData(today, selectedGraphType);
 
     $("#submit-btn").on("click", function() {
         var selectedDate = $("#date-input").val();
-        loadDayData(selectedDate);
+        var selectedGraphType = $("#graph-type-select").val();
+        loadDayData(selectedDate, selectedGraphType);
     });
 });
 
-function loadDayData(selectedDate) {
-    console.log(`Loading data for ${selectedDate}`);
+function loadDayData(selectedDate, selectedGraphType) {
+    console.log(`Loading ${selectedGraphType} data for ${selectedDate}`);
     $.ajax({
         type: "POST",
         contentType: "application/json",
         dataType: "json",
         data: JSON.stringify({
-            selectedDate: selectedDate
+            selectedDate: selectedDate,
+            selectedGraphType: selectedGraphType
         }),
         url: "/EnergyLogs/getDayData",
         success: function(result) {
             console.log(JSON.stringify(result));
-            var dataPoints = [];
-            result.forEach(element => {
-                dataPoints.push({ x: new Date(element.Timestamp), y: element.Delta });
-            });
+            var dataPoints = populateDataPoints(result, selectedGraphType);
             var chart = buildEnergyChart("daily-energy-chart",
                                          "Energy Consumption",
                                          "Timestamp",

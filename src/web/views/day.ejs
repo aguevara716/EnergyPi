@@ -1,13 +1,28 @@
 <%- include("partials/header") -%>
 <script type="text/javascript" src="day.js"></script>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm" id="date-column">
-            Date:
-            <input id="date-input" type="date">
+<div class="card" style="padding:20px">
+    <div class="card-header">Parameters</div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm" id="date-column">
+                    Date:
+                    <input id="date-input" type="date">
+                </div>
+                <div col="col-sm" id="graph-type-column">
+                    Graph Type:
+                    <select id="graph-type-select">
+                        <option value="raw">Raw</option>
+                        <option value="hourly">Hourly</option>
+                        <!-- <option value="tou">Time Of Use</option> -->
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="col-sm" id="submit-column">
+    </div>
+    <div class="card-footer">
+        <div class="col-sm" id="submit-column" style="text-align: end;">
             <button class="btn btn-primary" id="submit-btn">Show Results</button>
         </div>
     </div>
