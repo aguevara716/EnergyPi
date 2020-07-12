@@ -24,10 +24,13 @@ def parse_output(line):
     print("Parsing output")
     json_obj = json.loads(line)
     timestampString = json_obj["Time"]
-    timestamp = parser.parse(timestampString).strftime("%Y-%m-%d %H:%M:%S")
+    broadcast_timestamp = parser.parse(timestampString).strftime("%Y-%m-%d %H:%M:%S")
     consumption = json_obj["Message"]["Consumption"]/100
-    previous_consumption = get_previous_consumption()
-    write_to_database(timestamp, consumption, previous_consumption)
+    previous_record = get_previous_record()
+    previous_consumption = previous_record[0]
+    previous_timestamp = previous_record[1]
+    seconds_between_broadcasts = (broadcast_timestamp - previous_timestamp).total_seconds()
+    write_to_database(broadcast_timestamp, consumption, previous_consumption, seconds_between_broadcasts)
 
 
 def get_database_connection():
@@ -41,30 +44,36 @@ def get_database_connection():
     return mariadb_connection
 
 
-def get_previous_consumption():
+def get_previous_record():
     mariadb_connection = get_database_connection()
     cursor = mariadb_connection.cursor(buffered=True)
-    get_prev_consumption_command = "SELECT TotalConsumption FROM EnergyLogs ORDER BY Timestamp DESC LIMIT 1"
-    print(get_prev_consumption_command)
-    cursor.execute(get_prev_consumption_command)
-    prev_consumption_response = cursor.fetchone()
-    if prev_consumption_response is None:
+    get_prev_record_command = "SELECT TotalConsumption, Timestamp FROM EnergyLogs ORDER BY Timestamp DESC LIMIT 1"
+    print(get_prev_record_command)
+    cursor.execute(get_prev_record_command)
+    prev_record_response = cursor.fetchone()
+    if prev_record_response is None:
         mariadb_connection.close()
         return 0.0
     else:
-        prev_consumption = float(prev_consumption_response[0])
+        prev_consumption = float(prev_record_response[0])
+        prev_timestamp = prev_record_response[1]
         print(f"previous consumption: {prev_consumption}")
+        print(f"previous timestamp: {prev_timestamp}")
         mariadb_connection.close()
-        return prev_consumption
+        return (prev_consumption, prev_timestamp)
 
 
-def write_to_database(timestamp, consumption_kwh, prev_consumption):
+def write_to_database(timestamp, consumption_kwh, prev_consumption, seconds_between_broadcasts):
     mariadb_connection = get_database_connection()
     cursor = mariadb_connection.cursor(buffered=True)
     delta = 0.0
     if prev_consumption is not None:
         delta = consumption_kwh - prev_consumption
-    insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta) VALUES ('{timestamp}', {consumption_kwh}, {delta})"
+    power = 0.0
+    if prev_consumption is not None and seconds_between_broadcasts is not None:
+        percent_of_hour = seconds_between_broadcasts / 3600
+        power = delta / percent_of_hour
+    insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta, PowerDraw) VALUES ('{timestamp}', {consumption_kwh}, {delta}, {power})"
     print(insert_command)
     cursor.execute(insert_command)
     mariadb_connection.commit()
