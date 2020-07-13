@@ -10,6 +10,7 @@ from configparser import ConfigParser
 def run_command(command):
     print("Launching rtlamr")
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+    print("listening for output...")
     while True:
         output = process.stdout.readline()
         if output == '' and process.poll() is not None:
@@ -21,10 +22,12 @@ def run_command(command):
 
 
 def parse_output(line):
-    print("Parsing output")
+    print("-----BEGIN-----")
+    print(f"\"{line}\"")
     json_obj = json.loads(line)
     timestampString = json_obj["Time"]
-    broadcast_timestamp = parser.parse(timestampString).strftime("%Y-%m-%d %H:%M:%S")
+    datetime_format = "%Y-%m-%d %H:%M:%S"
+    broadcast_timestamp = parser.parse(timestampString).strftime(datetime_format)
     consumption = json_obj["Message"]["Consumption"]/100
     previous_record = get_previous_record()
     previous_consumption = previous_record[0]
@@ -75,6 +78,7 @@ def write_to_database(timestamp, consumption_kwh, prev_consumption, seconds_betw
         power = delta / percent_of_hour
     insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta, PowerDraw) VALUES ('{timestamp}', {consumption_kwh}, {delta}, {power})"
     print(insert_command)
+    print("-----END-----")
     cursor.execute(insert_command)
     mariadb_connection.commit()
     mariadb_connection.close()
