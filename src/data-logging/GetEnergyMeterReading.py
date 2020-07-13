@@ -29,7 +29,7 @@ def parse_output(line):
     previous_record = get_previous_record()
     previous_consumption = previous_record[0]
     previous_timestamp = previous_record[1]
-    seconds_between_broadcasts = (broadcast_timestamp - previous_timestamp).total_seconds()
+    seconds_between_broadcasts = (datetime.strptime(broadcast_timestamp, datetime_format) - previous_timestamp).total_seconds()
     write_to_database(broadcast_timestamp, consumption, previous_consumption, seconds_between_broadcasts)
 
 
