@@ -21,10 +21,10 @@ def run_command(command):
     return rc
 
 
-def parse_output(line):
+def parse_output(meter_broadcast):
     print("-----BEGIN-----")
-    print(f"\"{line}\"")
-    json_obj = json.loads(line)
+    print(f"\"{meter_broadcast}\"")
+    json_obj = json.loads(meter_broadcast)
     timestampString = json_obj["Time"]
     datetime_format = "%Y-%m-%d %H:%M:%S"
     broadcast_timestamp = parser.parse(timestampString).strftime(datetime_format)
