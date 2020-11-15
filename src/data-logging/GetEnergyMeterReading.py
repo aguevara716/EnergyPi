@@ -23,6 +23,7 @@ def run_command(command):
 
 def parse_output(meter_broadcast):
     print("-----BEGIN-----")
+    meter_broadcast = meter_broadcast.replace("b'", "")
     print(f"\"{meter_broadcast}\"")
     json_obj = json.loads(meter_broadcast)
     timestampString = json_obj["Time"]
