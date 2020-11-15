@@ -16,15 +16,15 @@ def run_command(command):
         if output == '' and process.poll() is not None:
             break
         if output:
-            parse_output(output.strip())
+            parse_output(output.strip().decode("utf-8"))
     rc = process.poll()
     return rc
 
 
-def parse_output(line):
+def parse_output(meter_broadcast: str):
     print("-----BEGIN-----")
-    print(f"\"{line}\"")
-    json_obj = json.loads(line)
+    print(f"\"{meter_broadcast}\"")
+    json_obj = json.loads(meter_broadcast)
     timestampString = json_obj["Time"]
     datetime_format = "%Y-%m-%d %H:%M:%S"
     broadcast_timestamp = parser.parse(timestampString).strftime(datetime_format)
@@ -33,7 +33,7 @@ def parse_output(line):
     previous_consumption = previous_record[0]
     previous_timestamp = previous_record[1]
     seconds_between_broadcasts = (datetime.strptime(broadcast_timestamp, datetime_format) - previous_timestamp).total_seconds()
-    write_to_database(broadcast_timestamp, consumption, previous_consumption, seconds_between_broadcasts)
+    write_to_database(broadcast_timestamp, consumption, previous_consumption, seconds_between_broadcasts, meter_broadcast)
 
 
 def get_database_connection():
@@ -66,7 +66,7 @@ def get_previous_record():
         return (prev_consumption, prev_timestamp)
 
 
-def write_to_database(timestamp, consumption_kwh, prev_consumption, seconds_between_broadcasts):
+def write_to_database(timestamp, consumption_kwh, prev_consumption, seconds_between_broadcasts, meter_broadcast):
     mariadb_connection = get_database_connection()
     cursor = mariadb_connection.cursor(buffered=True)
     delta = 0.0
@@ -76,7 +76,7 @@ def write_to_database(timestamp, consumption_kwh, prev_consumption, seconds_betw
     if prev_consumption is not None and seconds_between_broadcasts is not None:
         percent_of_hour = seconds_between_broadcasts / 3600
         power = delta / percent_of_hour
-    insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta, PowerDraw) VALUES ('{timestamp}', {consumption_kwh}, {delta}, {power})"
+    insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta, PowerDraw, MeterBroadcast) VALUES ('{timestamp}', {consumption_kwh}, {delta}, {power}, '{meter_broadcast}')"
     print(insert_command)
     print("-----END-----")
     cursor.execute(insert_command)
