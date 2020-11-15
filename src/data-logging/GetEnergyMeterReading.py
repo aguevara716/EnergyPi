@@ -76,7 +76,7 @@ def write_to_database(timestamp, consumption_kwh, prev_consumption, seconds_betw
     if prev_consumption is not None and seconds_between_broadcasts is not None:
         percent_of_hour = seconds_between_broadcasts / 3600
         power = delta / percent_of_hour
-    insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta, PowerDraw, MeterBroadcast) VALUES ('{timestamp}', {consumption_kwh}, {delta}, {power}, {meter_broadcast})"
+    insert_command = f"INSERT INTO EnergyLogs (Timestamp, TotalConsumption, Delta, PowerDraw, MeterBroadcast) VALUES ('{timestamp}', {consumption_kwh}, {delta}, {power}, '{meter_broadcast}')"
     print(insert_command)
     print("-----END-----")
     cursor.execute(insert_command)
