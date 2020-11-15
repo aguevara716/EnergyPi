@@ -16,14 +16,13 @@ def run_command(command):
         if output == '' and process.poll() is not None:
             break
         if output:
-            parse_output(output.strip())
+            parse_output(output.strip().decode("utf-8"))
     rc = process.poll()
     return rc
 
 
 def parse_output(meter_broadcast):
     print("-----BEGIN-----")
-    meter_broadcast = meter_broadcast.replace("b'", "")
     print(f"\"{meter_broadcast}\"")
     json_obj = json.loads(meter_broadcast)
     timestampString = json_obj["Time"]
