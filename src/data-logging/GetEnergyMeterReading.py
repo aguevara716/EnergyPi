@@ -21,7 +21,7 @@ def run_command(command):
     return rc
 
 
-def parse_output(meter_broadcast):
+def parse_output(meter_broadcast: str):
     print("-----BEGIN-----")
     print(f"\"{meter_broadcast}\"")
     json_obj = json.loads(meter_broadcast)
