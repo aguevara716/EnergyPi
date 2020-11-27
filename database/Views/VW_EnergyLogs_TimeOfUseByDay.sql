@@ -1,53 +1,60 @@
-WITH TouConsumption AS
+DROP VIEW IF EXISTS VW_EnergyLogs_TimeOfUseByDay;
+
+CREATE VIEW IF NOT EXISTS VW_EnergyLogs_TimeOfUseByDay
+AS
 (
     SELECT
         `Timestamp`,
         DATE(`Timestamp`) AS `Date`,
-        (
+        
+        @isHighSeason := (
+            -- High season = Jun 1 to Oct 1
             DATE_FORMAT(`Timestamp`, '%m-%d') >= '06-01' AND 
             DATE_FORMAT(`Timestamp`, '%m-%d') < '10-01' 
         ) AS IsHighSeason,
-        (
-            HOUR(`Timestamp`) >= 8 AND 
-            HOUR(`Timestamp`) < 24 
-        ) AS IsPeakHour,
-        (
+        
+        @isSuperPeakHour := (
+            -- Super peak hours = weekdays from 1400 to 1800 during high season
             WEEKDAY(`Timestamp`) < 5 AND 
             HOUR(`Timestamp`) >= 14 AND 
-            HOUR(`Timestamp`) <= 18 AND 
-            DATE_FORMAT(`Timestamp`, '%m-%d') >= '06-01' AND 
-            DATE_FORMAT(`Timestamp`, '%m-%d') < '10-01' 
+            HOUR(`Timestamp`) < 18 AND 
+            @isHighSeason = 1
         ) AS IsSuperPeakHour,
+        
+        @isPeakHour := (
+            -- Peak hours = 0800 to 2359, excluding weekdays from 1400 to 1800 during high season
+            HOUR(`Timestamp`) >= 8 AND 
+            HOUR(`Timestamp`) < 24 AND
+            @isSuperPeakHour = 0
+        ) AS IsPeakHour,
+        
+        CASE WHEN @isHighSeason = 0 AND @isPeakHour = 0 AND @isSuperPeakHour = 0
+            THEN 'Off-peak low season'
+            ELSE CASE WHEN @isHighSeason = 0 AND @isPeakHour = 1 AND @isSuperPeakHour = 0
+                THEN 'Peak low season'
+                ELSE CASE WHEN @isHighSeason = 1 AND @isPeakHour = 0 AND @isSuperPeakHour = 0
+                    THEN 'Off-peak high season'
+                    ELSE CASE WHEN @isHighSeason = 1 AND @isPeakHour = 1 AND @isSuperPeakHour = 0
+                        THEN 'Peak high season'
+                        ELSE CASE WHEN @isHighSeason = 1 AND @isPeakHour = 0 AND @isSuperPeakHour = 1
+                            THEN 'Super-peak high season'
+                            ELSE 'Unkonwn'
+                        END
+                    END
+                END
+            END
+        END AS RatePeriod,
+        
         SUM(Delta) AS Consumption,
         COUNT(0) AS `DataPoints`
     FROM
         EnergyLogs
+    WHERE
+        `Timestamp` >= '2020-07-16' AND
+        `Timestamp` < '2020-07-17'
     GROUP BY
-        DATE_FORMAT(`Timestamp`, '%Y-%m'),
+        DATE_FORMAT(`Timestamp`, '%Y-%m-%d %H:00'),
         IsHighSeason,
         IsPeakHour,
         IsSuperPeakHour
 )
-SELECT 
-    *
---     `Date`,
---     CASE WHEN IsHighSeason = 0
---         THEN CASE WHEN IsPeakHour = 0
---             THEN 'Off-Peak Low Season'
---             ELSE 'Peak Low Season'
---         END
---         ELSE CASE WHEN IsPeakHour = 0
---             THEN 'Off-Peak High Season'
---             ELSE CASE WHEN IsSuperPeakHour = 0
---                 THEN 'Peak High Season'
---                 ELSE 'Super-Peak High Season'
---             END
---         END
---     END AS 'Period',
---     Consumption,
---     DataPoints
-FROM
-    TouConsumption
-WHERE
-    `Timestamp` >= '2020-01-01' and
-    `Timestamp` < '2020-11-25'
