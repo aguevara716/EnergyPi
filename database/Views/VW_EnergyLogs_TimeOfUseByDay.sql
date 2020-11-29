@@ -49,9 +49,6 @@ AS
         COUNT(0) AS `DataPoints`
     FROM
         EnergyLogs
-    WHERE
-        `Timestamp` >= '2020-07-16' AND
-        `Timestamp` < '2020-07-17'
     GROUP BY
         DATE_FORMAT(`Timestamp`, '%Y-%m-%d %H:00'),
         IsHighSeason,
