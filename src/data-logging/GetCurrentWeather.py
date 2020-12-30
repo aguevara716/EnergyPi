@@ -13,11 +13,11 @@ def get_current_conditions():
     longitude = config.getfloat("main", "longitude")
     api_key = config.get("main", "openweathermap_api_key")
 
-    url = f"https://api.darksky.net/forecast/{api_key}/{latitude},{longitude}"
+    url = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&units=imperial&appid={api_key}"
     response = urllib.request.urlopen(url)
     json_response = response.read().decode("utf-8")
     json_obj = json.loads(json_response)
-    current_conditions = json_obj["currently"]
+    current_conditions = json_obj["main"]
     return current_conditions
 
 
@@ -53,7 +53,7 @@ db_settings_file = sys.argv[2]
 
 current_conditions = get_current_conditions()
 timestamp = get_timestamp_as_string()
-temperature_f = current_conditions["temperature"]
+temperature_f = current_conditions["temp"]
 humidity = current_conditions["humidity"]
 
 write_to_database(timestamp, temperature_f, humidity)
