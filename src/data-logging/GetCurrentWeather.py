@@ -11,7 +11,7 @@ def get_current_conditions():
     config.read(weather_settings_file)
     latitude = config.getfloat("main", "latitude")
     longitude = config.getfloat("main", "longitude")
-    api_key = config.get("main", "darksky_api_key")
+    api_key = config.get("main", "openweathermap_api_key")
 
     url = f"https://api.darksky.net/forecast/{api_key}/{latitude},{longitude}"
     response = urllib.request.urlopen(url)
