@@ -54,6 +54,6 @@ db_settings_file = sys.argv[2]
 current_conditions = get_current_conditions()
 timestamp = get_timestamp_as_string()
 temperature_f = current_conditions["temp"]
-humidity = current_conditions["humidity"]
+humidity = current_conditions["humidity"] / 100
 
 write_to_database(timestamp, temperature_f, humidity)
