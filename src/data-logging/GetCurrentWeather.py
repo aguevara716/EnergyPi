@@ -56,4 +56,7 @@ timestamp = get_timestamp_as_string()
 temperature_f = current_conditions["temp"]
 humidity = current_conditions["humidity"] / 100
 
+print(f"temperature: {temperature_f}")
+print(f"humidity: {humidity}")
+
 write_to_database(timestamp, temperature_f, humidity)
